@@ -38,7 +38,7 @@ COMET supports:
 make
 ```
 
-Requires: `flex`, `bison`, `gcc`, and `luajit`
+Requires: `flex`, `bison`, `gcc`, and `luajit` (with bytecode support)
 
 ## Usage
 
@@ -50,14 +50,15 @@ Compile a COMET source file to LuaJIT bytecode:
 
 **Examples:**
 ```bash
-./parser program.comet output.bc       # Generates output.bc
-./parser hello.comet                   # Generates a.out
+./parser program.comet output.bc       # Generates output.bc (LuaJIT bytecode)
+./parser hello.comet                   # Generates a.out (LuaJIT bytecode)
 ```
 
 The compiler will:
 1. Parse the COMET source file
-2. Generate intermediate Lua source (saved as `<output>.bc.lua`)
-3. Compile to LuaJIT bytecode using luajit
+2. Generate equivalent Lua source code
+3. Compile to LuaJIT bytecode using luajit (optimized binary format)
+4. Save generated Lua as `<output>.bc.lua` for reference
 
 ## Running Bytecode
 

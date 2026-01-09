@@ -6,7 +6,7 @@ The main test file is `comprehensive_test.txt`, which covers all features of the
 
 ### Running Tests
 
-To compile and test the comprehensive test suite:
+To compile to bytecode and run the comprehensive test suite:
 
 ```bash
 ./parser comprehensive_test.txt
@@ -18,6 +18,8 @@ Or in one command:
 ```bash
 ./parser comprehensive_test.txt && luajit a.out
 ```
+
+The parser generates `a.out` as LuaJIT bytecode, which is immediately executable.
 
 ## Test Coverage
 
@@ -156,21 +158,22 @@ This makes it easy to identify which feature is being tested in the output.
 ## Building and Running
 
 1. **Build the parser:**
-   ```bash
-   make clean
-   make
-   ```
+    ```bash
+    make clean
+    make
+    ```
 
-2. **Run comprehensive test:**
-   ```bash
-   ./parser comprehensive_test.txt
-   luajit a.out
-   ```
+2. **Compile to bytecode and run:**
+    ```bash
+    ./parser comprehensive_test.txt && luajit a.out
+    ```
+    This generates `a.out` (LuaJIT bytecode) and executes it immediately.
 
-3. **View generated Lua code:**
-   ```bash
-   cat a.out.lua
-   ```
+3. **View intermediate Lua source code:**
+    ```bash
+    cat a.out.lua
+    ```
+    The `.lua` file shows the generated Lua code before bytecode compilation.
 
 ## Adding New Tests
 
