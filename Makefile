@@ -1,5 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g $(shell pkg-config --cflags luajit)
+LDFLAGS = $(shell pkg-config --libs luajit)
 FLEX = flex
 BISON = bison
 
@@ -10,7 +11,7 @@ OBJECTS = $(SOURCES:.c=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 parser.tab.c parser.tab.h: parser.y
 	$(BISON) -d parser.y

@@ -19,7 +19,7 @@ Or in one command:
 ./parser comprehensive_test.txt && luajit a.out
 ```
 
-The parser generates `a.out` as LuaJIT bytecode, which is immediately executable.
+The parser directly generates `a.out` as LuaJIT bytecode through internal Lua compilation, which is immediately executable with no external tools needed.
 
 ## Test Coverage
 
@@ -167,13 +167,13 @@ This makes it easy to identify which feature is being tested in the output.
     ```bash
     ./parser comprehensive_test.txt && luajit a.out
     ```
-    This generates `a.out` (LuaJIT bytecode) and executes it immediately.
+    This generates `a.out` (LuaJIT bytecode) through direct bytecode emission and executes it.
 
 3. **View intermediate Lua source code:**
     ```bash
     cat a.out.lua
     ```
-    The `.lua` file shows the generated Lua code before bytecode compilation.
+    The `.lua` file contains the generated Lua code that was internally compiled to bytecode.
 
 ## Adding New Tests
 

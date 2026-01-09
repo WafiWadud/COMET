@@ -56,9 +56,9 @@ Compile a COMET source file to LuaJIT bytecode:
 
 The compiler will:
 1. Parse the COMET source file
-2. Generate equivalent Lua source code
-3. Compile to LuaJIT bytecode using luajit (optimized binary format)
-4. Save generated Lua as `<output>.bc.lua` for reference
+2. Generate equivalent Lua source code (during parsing)
+3. Emit LuaJIT bytecode directly using Lua's dump function
+4. Optionally save intermediate Lua as `<output>.bc.lua` for reference
 
 ## Running Bytecode
 

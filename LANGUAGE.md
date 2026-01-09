@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a statically-typed programming language that compiles directly to LuaJIT bytecode. The language emphasizes clarity with explicit type annotations and straightforward syntax. COMET generates Lua source as an intermediate representation, which is then compiled to optimized bytecode.
+This is a statically-typed programming language that compiles directly to LuaJIT bytecode. The language emphasizes clarity with explicit type annotations and straightforward syntax. The COMET compiler generates Lua source internally and emits optimized bytecode directly, without requiring external compilation steps.
 
 ## Data Types
 
@@ -880,7 +880,7 @@ Error messages indicate the line number where parsing failed.
 1. **Lexical Analysis**: Tokenizes input into keywords, operators, literals, identifiers
 2. **Parsing**: Builds abstract syntax tree and validates syntax
 3. **Code Generation**: Emits equivalent Lua code with semantic actions during parsing
-4. **Bytecode Compilation**: LuaJIT compiles intermediate Lua to optimized bytecode format
+4. **Bytecode Emission**: Lua's dump function serializes compiled code to LuaJIT bytecode format
 5. **Output**: Final bytecode file is executable directly with luajit
 
 ## Limitations
