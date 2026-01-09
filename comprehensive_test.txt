@@ -1,0 +1,158 @@
+# Comprehensive Language Test
+
+# Variable declarations with type annotations
+let x: number = 42
+let y: number = 3.14
+let name: string = "Test"
+let flag: bool = true
+
+# Variable declarations without type
+let z = 100;
+
+# Array declarations
+let numbers: number[5] = [1, 2, 3, 4, 5]
+let items: array[] = [10, 20, 30]
+
+print("=== Arithmetic Operations ===")
+print(x + y)
+print(x - y)
+print(x * y)
+print(x / y)
+
+print("=== Compound Assignments ===")
+let counter: number = 10;
+counter += 5
+print(counter)
+counter -= 3
+print(counter)
+counter *= 2
+print(counter)
+counter /= 4
+print(counter)
+
+print("=== Comparison Operators ===")
+(x == 42)?
+print("x equals 42")
+done
+
+(y > 3)?
+print("y is greater than 3")
+done
+
+(x != 0)?
+print("x is not zero")
+done
+
+(y < 5)?
+print("y is less than 5")
+done
+
+(x >= 40)?
+print("x is greater than or equal to 40")
+done
+
+(y <= 4)?
+print("y is less than or equal to 4")
+done
+
+print("=== Logical Operators ===")
+(x > 30 && y < 5)?
+print("AND: both conditions true")
+done
+
+(x < 30 || y > 2)?
+print("OR: at least one condition true")
+done
+
+(x > 40 && y > 5)?
+print("Should not print")
+done
+
+print("=== Conditional Blocks ===")
+(x + y > 40)?
+print("sum is greater than 40")
+done
+
+(z == 100)?
+print("z equals 100")
+done
+
+print("=== Simple Loop ===")
+let i: number = 1;
+until (i <= 5)?
+  print(i)
+  i += 1
+done
+
+print("=== Nested Loops ===")
+let a: number = 1;
+until (a <= 2)?
+  print(a)
+  let b: number = 1;
+  until (b <= 3)?
+    print(b)
+    b += 1
+  done
+  a += 1
+done
+
+print("=== Loop with Compound Operators ===")
+let counter2: number = 10;
+until (counter2 >= 5)?
+  print(counter2)
+  counter2 -= 2
+done
+
+print("=== Variable Scope in Nested Loops ===")
+let outer: number = 1;
+until (outer <= 2)?
+  let inner: number = 100;
+  until (inner <= 102)?
+    print(inner)
+    inner += 1
+  done
+  outer += 1
+done
+
+print("=== Complex Expressions ===")
+print((10 + 5) * 2)
+print(100 / (5 - 2))
+print(2 + 3 * 4)
+print((2 + 3) * 4)
+
+print("=== Boolean Expressions ===")
+(true && true)?
+print("both true")
+done
+
+(false || true)?
+print("one true")
+done
+
+print("=== Multiple Conditions ===")
+(x > 40 && y > 3 && z == 100)?
+print("all three conditions true")
+done
+
+print("=== String Variables ===")
+print(name)
+
+print("=== Functions with Parameters ===")
+function add(a: number, b: number) -> number
+  return a + b
+done
+
+function multiply(x: number, y: number) -> number
+  return x * y
+done
+
+function greet(name: string) -> string
+  return name
+done
+
+print(add(5, 10))
+print(add(100, 200))
+print(multiply(4, 5))
+print(greet("World"))
+
+print("=== Test Complete ===")

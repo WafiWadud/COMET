@@ -1,0 +1,30 @@
+# Generated files from Flex
+lex.yy.c
+lex.yy.o
+
+# Generated files from Bison
+parser.tab.c
+parser.tab.h
+parser.tab.o
+
+# Compiled parser binary
+parser
+
+# Compiled bytecode and Lua output
+*.bc
+*.bc.lua
+*.out
+
+# Object files
+*.o
+
+# Build artifacts
+a.out
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
