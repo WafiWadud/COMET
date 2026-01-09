@@ -34,11 +34,32 @@ COMET supports:
 
 ## Building
 
+### Release Build (Optimized)
+
 ```bash
 make
+# or explicitly
+make release
 ```
 
-Requires: `flex`, `bison`, `gcc`, and `luajit` (with bytecode support)
+This produces an optimized `parser` binary with aggressive compiler optimizations.
+
+### Debug Build
+
+```bash
+make debug
+```
+
+This produces a `parser-debug` binary with full debugging symbols and no optimizations.
+
+**Requirements:** `flex`, `bison`, and `clang`
+
+LuaJIT is included as a static library in the `thirdparty/luajit` directory and will be compiled as part of the build process.
+
+**Compilation Flags:**
+
+- **Release**: `-O3 -march=native -flto -ffast-math` with link-time optimization, dead code elimination, and symbol stripping
+- **Debug**: `-O0 -g3 -ggdb3` with full debugging information and no optimizations
 
 ## Usage
 

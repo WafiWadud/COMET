@@ -883,6 +883,22 @@ Error messages indicate the line number where parsing failed.
 4. **Bytecode Emission**: Lua's dump function serializes compiled code to LuaJIT bytecode format
 5. **Output**: Final bytecode file is executable directly with luajit
 
+## Building the Compiler
+
+The COMET compiler itself is built with clang and advanced optimizations:
+
+### Release Build
+```bash
+make
+```
+Produces optimized `parser` binary with `-O3 -march=native -flto -ffast-math` and link-time optimizations.
+
+### Debug Build
+```bash
+make debug
+```
+Produces `parser-debug` binary with `-O0 -g3 -ggdb3` for debugging with gdb or lldb.
+
 ## Limitations
 
 - No type checking at compile time (relies on Lua's dynamic typing)

@@ -1,0 +1,3 @@
+[submodule "thirdparty/luajit"]
+	path = thirdparty/luajit
+	url = https://github.com/LuaJIT/LuaJIT

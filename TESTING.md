@@ -157,10 +157,12 @@ This makes it easy to identify which feature is being tested in the output.
 
 ## Building and Running
 
-1. **Build the parser:**
+### Release Build
+
+1. **Build the optimized parser:**
     ```bash
-    make clean
     make
+    # or explicitly: make release
     ```
 
 2. **Compile to bytecode and run:**
@@ -174,6 +176,24 @@ This makes it easy to identify which feature is being tested in the output.
     cat a.out.lua
     ```
     The `.lua` file contains the generated Lua code that was internally compiled to bytecode.
+
+### Debug Build
+
+1. **Build with debugging symbols:**
+    ```bash
+    make debug
+    ```
+
+2. **Compile and run with debug binary:**
+    ```bash
+    ./parser-debug comprehensive_test.txt && luajit a.out
+    ```
+
+3. **Debug with gdb:**
+    ```bash
+    gdb ./parser-debug
+    (gdb) run comprehensive_test.txt
+    ```
 
 ## Adding New Tests
 

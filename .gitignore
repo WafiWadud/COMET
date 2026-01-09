@@ -29,3 +29,8 @@ a.out
 *.swo
 *~
 .DS_Store
+
+# Compiled LuaJIT library
+thirdparty/luajit/src/*.a
+thirdparty/luajit/src/*.so
+thirdparty/luajit/src/*.o
