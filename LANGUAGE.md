@@ -221,8 +221,9 @@ Returns a boolean value.
 |----------|---------|---------|
 | `&&` | Logical AND | `a && b` |
 | `\|\|` | Logical OR | `a \|\| b` |
+| `!` | Logical NOT | `!flag` |
 
-**Precedence**: `&&` binds tighter than `\|\|`
+**Precedence**: `!` binds tightest, then `&&`, then `\|\|`
 
 ```
 a || b && c    # Evaluates as a || (b && c)
@@ -287,6 +288,37 @@ done
 
 This loop prints numbers 1 through 9, incrementing `i` by 1 each iteration.
 
+### Break and Continue
+
+The `break` statement exits a loop immediately. The `continue` statement skips to the next iteration.
+
+```
+break       # Exit the loop
+continue    # Skip to next iteration
+```
+
+**Examples:**
+```
+let i: number = 1;
+until (i > 10)?
+  (i == 5)?
+    break  // Exit when i equals 5
+  done
+  print(i)
+  i += 1
+done
+
+let j: number = 1;
+until (j > 10)?
+  (j == 3)?
+    j += 1
+    continue  // Skip printing when j is 3
+  done
+  print(j)
+  j += 1
+done
+```
+
 ### Nested Loops
 
 Loops can be nested inside other loops. Variable declarations in nested loops are scoped to the loop they appear in.
@@ -320,45 +352,45 @@ This prints:
 
 ### Conditional Blocks
 
-Conditional blocks evaluate an expression and execute code if the result is truthy.
+Conditional blocks evaluate an expression and execute one or more statements if the result is truthy.
 
 ```
 (<expression>)?
-<statement>
+  <statement>
+  <statement>
+  ...
 done
 ```
 
 ### Syntax Notes
 
 - The `?` marks the condition
-- Only one statement can follow (typically a `print()` call)
+- Multiple statements can follow
 - Block must end with `done`
+- Statements can include: function calls, assignments, variable declarations, return statements, break, and continue
 
 ### Examples
 
 ```
 (x == 42)?
-print("x is forty-two")
+  print("x is forty-two")
 done
 
 (y > 10)?
-print("y is greater than 10")
+  print("y is greater than 10")
+  y = y - 1
 done
 
 (flag && count > 0)?
-print("conditions met")
+  print("conditions met")
+  count -= 1
+done
+
+(!(x > 20))?  // Using NOT operator
+  print("x is not greater than 20")
+  x = x + 10
 done
 ```
-
-### Expression Checks (standalone)
-
-Expressions can be evaluated without a following statement:
-
-```
-(x + y)?
-```
-
-This evaluates the expression but does nothing with the result. Useful for testing.
 
 ## Built-in Functions
 
@@ -404,12 +436,18 @@ Alice
 
 ## Comments
 
-Lines starting with `#` are comments and are ignored.
+COMET supports both line and inline comments:
 
 ```
-# This is a comment
-let x: number = 42  # inline comments not supported
+# Line comment using hash
+let x: number = 42
+let y: number = 50  // Inline comment using //
+
+// Another inline comment style
+x = x + 10
 ```
+
+Comments are stripped during lexical analysis and do not affect the compiled output.
 
 ## Complete Program Example
 

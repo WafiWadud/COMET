@@ -31,10 +31,10 @@ void emit_lua(const char *fmt, ...) {
 }
 
 /* Token declarations */
-%token LET DONE FUNCTION RETURN PRINT INPUT UNTIL
+%token LET DONE FUNCTION RETURN BREAK CONTINUE PRINT INPUT UNTIL
 %token TRUE FALSE
 %token BOOL NUMBER STRING ARRAY
-%token EQ NEQ LT GT LE GE OR AND
+%token EQ NEQ LT GT LE GE OR AND NOT
 %token PLUS MINUS MULT DIV ASSIGN
 %token PLUS_ASSIGN MINUS_ASSIGN MULT_ASSIGN DIV_ASSIGN
 %token LPAREN RPAREN LBRACKET RBRACKET
@@ -44,7 +44,7 @@ void emit_lua(const char *fmt, ...) {
 %token <str> STRING_LITERAL IDENTIFIER
 
 /* Non-terminal types */
-%type <str> type array_type value expression argument_list array_elements array_value conditional_block loop_block loop_statement_list loop_statement assignment parameter_list parameter return_statement
+%type <str> type array_type value expression argument_list array_elements array_value conditional_block conditional_body conditional_statement loop_block loop_statement_list loop_statement assignment parameter_list parameter return_statement
 
 /* Operator precedence */
 %left OR
@@ -71,7 +71,6 @@ statement:
     | function_declaration
     | conditional_block
     | loop_block
-    | expression_check
     | assignment
     | return_statement
     | function_call
@@ -95,8 +94,9 @@ loop_statement:
     assignment { $$ = $1; }
     | variable_declaration { $$ = strdup(""); }
     | function_call { $$ = strdup(""); }
-    | expression_check { $$ = strdup(""); }
     | loop_block { $$ = $1; }
+    | BREAK opt_semi { emit_lua("break\n"); $$ = strdup(""); }
+    | CONTINUE opt_semi { emit_lua("continue\n"); $$ = strdup(""); }
     ;
 
 return_statement:
@@ -128,7 +128,24 @@ assignment:
     ;
 
 conditional_block:
-    expression_check function_call DONE { }
+    LPAREN expression RPAREN QUESTION conditional_body DONE
+    { }
+    ;
+
+conditional_body:
+    /* empty */ { $$ = strdup(""); }
+    | conditional_statement { $$ = $1; }
+    | conditional_body conditional_statement { $$ = malloc(256); sprintf($$, "%s%s", $1, $2); }
+    ;
+
+conditional_statement:
+    function_call { $$ = strdup(""); }
+    | assignment { $$ = $1; }
+    | variable_declaration { $$ = strdup(""); }
+    | return_statement { $$ = $1; }
+    | BREAK opt_semi { emit_lua("break\n"); $$ = strdup(""); }
+    | CONTINUE opt_semi { emit_lua("continue\n"); $$ = strdup(""); }
+    | LPAREN expression RPAREN QUESTION conditional_body DONE { }
     ;
 
 variable_declaration:
@@ -217,12 +234,9 @@ argument_list:
     | argument_list COMMA expression { $$ = malloc(256); sprintf($$, "%s, %s", $1, $3); }
     ;
 
-expression_check:
-    LPAREN expression RPAREN QUESTION
-    ;
-
 expression:
     value { $$ = $1; }
+    | NOT expression { $$ = malloc(100); sprintf($$, "(not %s)", $2); }
     | expression PLUS expression { $$ = malloc(100); sprintf($$, "(%s + %s)", $1, $3); }
     | expression MINUS expression { $$ = malloc(100); sprintf($$, "(%s - %s)", $1, $3); }
     | expression MULT expression { $$ = malloc(100); sprintf($$, "(%s * %s)", $1, $3); }

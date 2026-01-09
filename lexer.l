@@ -18,13 +18,16 @@ IDENTIFIER  {IDENT_START}{IDENT_CONT}*
 %%
 
     /* Comments */
-#.*                 { /* ignore comments */ }
+#.*                 { /* ignore line comments */ }
+"//".*              { /* ignore inline comments */ }
 
     /* Keywords */
 "let"               { return LET; }
 "done"              { return DONE; }
 "function"          { return FUNCTION; }
 "return"            { return RETURN; }
+"break"             { return BREAK; }
+"continue"          { return CONTINUE; }
 "print"             { return PRINT; }
 "input"             { return INPUT; }
 "until"             { return UNTIL; }
@@ -38,6 +41,7 @@ IDENTIFIER  {IDENT_START}{IDENT_CONT}*
     /* Operators */
 "=="                { return EQ; }
 "!="                { return NEQ; }
+"!"                 { return NOT; }
 "<"                 { return LT; }
 ">"                 { return GT; }
 "<="                { return LE; }

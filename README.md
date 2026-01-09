@@ -65,9 +65,15 @@ luajit output.bc
 let x: number = 42
 let y: number = 3.14
 
-# Conditional blocks
+# Conditional blocks with multiple statements
 (x == 42)?
-print("equal")
+  print("equal")
+  x = x + 1  // Inline comment
+done
+
+# NOT operator
+(!(y > 4))?
+  print("y is not greater than 4")
 done
 
 # Functions with return statements
@@ -75,9 +81,12 @@ function add(a: number, b: number) -> number
   return a + b
 done
 
-# Loops
+# Loops with break
 let i: number = 1;
-until (i <= 5)?
+until (i > 10)?
+  (i == 5)?
+    break  // Exit loop
+  done
   print(i)
   i += 1
 done
