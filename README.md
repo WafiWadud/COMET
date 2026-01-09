@@ -15,10 +15,13 @@ A lexer and parser that compiles the COMET programming language to LuaJIT byteco
 
 COMET supports:
 - **Variable declarations** with type annotations (bool, number, string, array)
+- **Arrays**: homogeneous typed arrays and heterogeneous mixed-type arrays with nesting support
+- **Strings**: escape sequences, interpolation with `${}`, and concatenation with `..`
+- **String/Array operations**: length operator `#` for both strings and arrays
 - **Functions** with parameters, return types, and return statements
-- **Operators**: arithmetic (+, -, *, /), comparison (==, !=, <, >, <=, >=), logical (&&, ||)
+- **Operators**: arithmetic (+, -, *, /), string concatenation (..),  comparison (==, !=, <, >, <=, >=), logical (&&, ||)
 - **Compound assignments** (+=, -=, *=, /=)
-- **Control flow**: conditional blocks and while-style loops with nesting support
+- **Control flow**: conditional blocks with otherwise/else/elseif, while-style loops, nested structures, break/continue in loops and conditionals
 - **Input/Output**: print() and input() operations
 - **Expressions**: complex expressions with proper operator precedence
 - **Comments**: lines starting with #
@@ -65,36 +68,80 @@ luajit output.bc
 let x: number = 42
 let y: number = 3.14
 
-# Conditional blocks with multiple statements
-(x == 42)?
-  print("equal")
-  x = x + 1  // Inline comment
-done
+# String literals with escape sequences
+let msg: string = "Hello\nWorld"
+let quoted: string = "She said \"Hi\""
 
-# NOT operator
-(!(y > 4))?
-  print("y is not greater than 4")
+# String concatenation and interpolation
+let name = "World"
+let greeting = "Hello" .. " " .. name
+let info = "String length: " .. tostring(#greeting)
+
+# Arrays: homogeneous and heterogeneous
+let numbers: number[] = [1, 2, 3]
+let mixed = [42, "text", true]
+let nested = [1, [2, 3], [4, [5, 6]]]
+
+# print() does NOT add newlines automatically
+print(msg)
+print("\n")
+print(greeting)
+print("\n")
+print(info)
+print("\n")
+
+# Conditional blocks with otherwise/else
+(x > 40)?
+  print("x is greater")
+otherwise?
+  print("x is not greater")
 done
+print("\n")
+
+# Conditional with elseif
+(y > 5)?
+  print("y > 5")
+otherwise (y == 5)?
+  print("y == 5")
+otherwise?
+  print("y < 5")
+done
+print("\n")
 
 # Functions with return statements
 function add(a: number, b: number) -> number
   return a + b
 done
 
-# Loops with break
+# Loops with nested conditionals and break
 let i: number = 1;
-until (i > 10)?
-  (i == 5)?
+until (i > 5)?
+  (i == 3)?
+    print("Breaking at 3")
+    print("\n")
     break  // Exit loop
   done
   print(i)
+  print("\n")
   i += 1
 done
 
+# Nested conditionals with continue
+let j: number = 1;
+until (j > 3)?
+  (j == 2)?
+    print("Skipping 2")
+    print("\n")
+    continue  // Skip to next iteration
+  done
+  print(j)
+  print("\n")
+  j += 1
+done
+
 # Function calls
-print(x)
-print(y)
 print(add(x, y))
+print("\n")
 ```
 
 See `comprehensive_test.txt` for a complete test suite covering all COMET features.

@@ -31,10 +31,10 @@ void emit_lua(const char *fmt, ...) {
 }
 
 /* Token declarations */
-%token LET DONE FUNCTION RETURN BREAK CONTINUE PRINT INPUT UNTIL
+%token LET DONE FUNCTION RETURN BREAK CONTINUE PRINT INPUT UNTIL OTHERWISE
 %token TRUE FALSE
 %token BOOL NUMBER STRING ARRAY
-%token EQ NEQ LT GT LE GE OR AND NOT
+%token EQ NEQ LT GT LE GE OR AND NOT LENGTH CONCAT
 %token PLUS MINUS MULT DIV ASSIGN
 %token PLUS_ASSIGN MINUS_ASSIGN MULT_ASSIGN DIV_ASSIGN
 %token LPAREN RPAREN LBRACKET RBRACKET
@@ -44,7 +44,7 @@ void emit_lua(const char *fmt, ...) {
 %token <str> STRING_LITERAL IDENTIFIER
 
 /* Non-terminal types */
-%type <str> type array_type value expression argument_list array_elements array_value conditional_block conditional_body conditional_statement loop_block loop_statement_list loop_statement assignment parameter_list parameter return_statement
+%type <str> type array_type value expression argument_list array_elements array_element array_value conditional_block conditional_body conditional_statement loop_block loop_statement_list loop_statement assignment parameter_list parameter return_statement
 
 /* Operator precedence */
 %left OR
@@ -81,7 +81,7 @@ loop_block:
     UNTIL LPAREN expression RPAREN QUESTION 
     { emit_lua("while %s do\n", $3); }
     loop_statement_list DONE
-    { emit_lua("end\n"); $$ = strdup(""); }
+    { emit_lua("::loop_continue::\nend\n"); $$ = strdup(""); }
     ;
 
 loop_statement_list:
@@ -95,8 +95,9 @@ loop_statement:
     | variable_declaration { $$ = strdup(""); }
     | function_call { $$ = strdup(""); }
     | loop_block { $$ = $1; }
+    | conditional_block { $$ = strdup(""); }
     | BREAK opt_semi { emit_lua("break\n"); $$ = strdup(""); }
-    | CONTINUE opt_semi { emit_lua("continue\n"); $$ = strdup(""); }
+    | CONTINUE opt_semi { emit_lua("goto loop_continue\n"); $$ = strdup(""); }
     ;
 
 return_statement:
@@ -128,8 +129,21 @@ assignment:
     ;
 
 conditional_block:
-    LPAREN expression RPAREN QUESTION conditional_body DONE
-    { }
+    LPAREN expression RPAREN QUESTION
+    { emit_lua("if %s then\n", $2); }
+    conditional_body otherwise_part DONE
+    { emit_lua("end\n"); }
+    ;
+
+otherwise_part:
+    /* empty */
+    | OTHERWISE QUESTION
+      { emit_lua("else\n"); }
+      conditional_body
+    | OTHERWISE LPAREN expression RPAREN QUESTION
+      { emit_lua("elseif %s then\n", $3); }
+      conditional_body
+      otherwise_part
     ;
 
 conditional_body:
@@ -144,8 +158,11 @@ conditional_statement:
     | variable_declaration { $$ = strdup(""); }
     | return_statement { $$ = $1; }
     | BREAK opt_semi { emit_lua("break\n"); $$ = strdup(""); }
-    | CONTINUE opt_semi { emit_lua("continue\n"); $$ = strdup(""); }
-    | LPAREN expression RPAREN QUESTION conditional_body DONE { }
+    | CONTINUE opt_semi { emit_lua("goto loop_continue\n"); $$ = strdup(""); }
+    | LPAREN expression RPAREN QUESTION
+      { emit_lua("if %s then\n", $2); }
+      conditional_body DONE
+      { emit_lua("end\n"); }
     ;
 
 variable_declaration:
@@ -154,6 +171,8 @@ variable_declaration:
     | LET IDENTIFIER COLON array_type ASSIGN array_value opt_semi
     { emit_lua("local %s = %s\n", $2, $6); }
     | LET IDENTIFIER ASSIGN expression opt_semi
+    { emit_lua("local %s = %s\n", $2, $4); }
+    | LET IDENTIFIER ASSIGN array_value opt_semi
     { emit_lua("local %s = %s\n", $2, $4); }
     ;
 
@@ -173,6 +192,7 @@ array_type:
     | type LBRACKET INT_LITERAL RBRACKET        { $$ = $1; }
     | ARRAY LBRACKET RBRACKET                   { $$ = strdup("array"); }
     | ARRAY LBRACKET INT_LITERAL RBRACKET       { $$ = strdup("array"); }
+    | ARRAY                                      { $$ = strdup("array"); }
     ;
 
 value:
@@ -190,8 +210,13 @@ array_value:
     ;
 
 array_elements:
+    array_element { $$ = $1; }
+    | array_elements COMMA array_element { $$ = malloc(512); sprintf($$, "%s, %s", $1, $3); }
+    ;
+
+array_element:
     value { $$ = $1; }
-    | array_elements COMMA value { $$ = malloc(256); sprintf($$, "%s, %s", $1, $3); }
+    | array_value { $$ = $1; }
     ;
 
 function_declaration:
@@ -222,7 +247,7 @@ function_body:
 
 function_call:
     PRINT LPAREN expression RPAREN
-    { emit_lua("print(%s)\n", $3); }
+    { emit_lua("io.write(%s)\n", $3); }
     | IDENTIFIER LPAREN argument_list RPAREN
     { emit_lua("%s(%s)\n", $1, $3); }
     | IDENTIFIER LPAREN RPAREN
@@ -237,7 +262,9 @@ argument_list:
 expression:
     value { $$ = $1; }
     | NOT expression { $$ = malloc(100); sprintf($$, "(not %s)", $2); }
+    | LENGTH expression { $$ = malloc(100); sprintf($$, "(#%s)", $2); }
     | expression PLUS expression { $$ = malloc(100); sprintf($$, "(%s + %s)", $1, $3); }
+    | expression CONCAT expression { $$ = malloc(100); sprintf($$, "(%s .. %s)", $1, $3); }
     | expression MINUS expression { $$ = malloc(100); sprintf($$, "(%s - %s)", $1, $3); }
     | expression MULT expression { $$ = malloc(100); sprintf($$, "(%s * %s)", $1, $3); }
     | expression DIV expression { $$ = malloc(100); sprintf($$, "(%s / %s)", $1, $3); }
@@ -251,7 +278,21 @@ expression:
     | expression AND expression { $$ = malloc(100); sprintf($$, "(%s and %s)", $1, $3); }
     | LPAREN expression RPAREN { $$ = $2; }
     | IDENTIFIER LBRACKET expression RBRACKET { $$ = malloc(256); sprintf($$, "%s[%s]", $1, $3); }
-    | IDENTIFIER LPAREN argument_list RPAREN { $$ = malloc(256); sprintf($$, "%s(%s)", $1, $3); }
+    | expression LBRACKET expression RBRACKET { $$ = malloc(256); sprintf($$, "%s[%s]", $1, $3); }
+    | IDENTIFIER LPAREN argument_list RPAREN 
+    { 
+      // Handle builtin functions
+      if (strcmp($1, "tostring") == 0 || strcmp($1, "tonumber") == 0 ||
+          strcmp($1, "abs") == 0 || strcmp($1, "floor") == 0 || strcmp($1, "ceil") == 0 ||
+          strcmp($1, "min") == 0 || strcmp($1, "max") == 0 || strcmp($1, "sqrt") == 0 ||
+          strcmp($1, "run_cmd") == 0) {
+        $$ = malloc(256);
+        sprintf($$, "%s(%s)", $1, $3);
+      } else {
+        $$ = malloc(256);
+        sprintf($$, "%s(%s)", $1, $3);
+      }
+    }
     | IDENTIFIER LPAREN RPAREN { $$ = malloc(100); sprintf($$, "%s()", $1); }
     | INPUT LPAREN STRING_LITERAL COMMA type RPAREN 
     { 

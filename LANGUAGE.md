@@ -12,16 +12,64 @@ This is a statically-typed programming language that compiles to Lua and can be 
 - **`number`** - Numeric values (integers and floats): `42`, `3.14`
 - **`string`** - Text values: `"hello world"`
 
+### String Escape Sequences
+
+Strings support the following escape sequences:
+- `\n` - Newline
+- `\t` - Tab
+- `\r` - Carriage return
+- `\\` - Backslash
+- `\"` - Double quote
+
+**Examples:**
+```
+let msg: string = "Line 1\nLine 2"
+let quoted: string = "She said \"Hello\""
+let path: string = "C:\\Users\\Name"
+```
+
+### String Interpolation
+
+Strings support interpolation using `${expression}` syntax:
+
+```
+let name = "Alice"
+let age = 30
+let info = "Name: ${name}, Age: ${age}"
+print(info)  // Outputs: Name: Alice, Age: 30
+```
+
+Expressions inside `${}` are evaluated and converted to strings.
+
+### String Concatenation
+
+Use the `..` operator to concatenate strings:
+
+```
+let greeting = "Hello" .. " " .. "World"
+print(greeting)  // Outputs: Hello World
+```
+
 ### Array Types
 
-Arrays are homogeneous collections with optional fixed sizes:
+Arrays can be homogeneous (single type) or heterogeneous (mixed types):
 
+**Homogeneous arrays:**
 ```
 number[]           # Dynamic array of numbers
 number[5]          # Array of 5 numbers
-array[]            # Generic dynamic array
-array[10]          # Generic array with size 10
+string[]           # Dynamic array of strings
+bool[3]            # Array of 3 booleans
 ```
+
+**Heterogeneous arrays:**
+```
+array              # Generic array (can hold any types)
+array[]            # Dynamic generic array
+array[10]          # Generic array with fixed size 10
+```
+
+Arrays can contain nested arrays at any depth.
 
 ### Array Access and Assignment
 
@@ -41,7 +89,7 @@ arr[i] = value     # Set element at index i
 arr[i] += 5        # Add 5 to element at index i
 ```
 
-**Examples:**
+**Homogeneous Array Examples:**
 ```
 let numbers: number[] = [10, 20, 30]
 print(numbers[1])  # Outputs: 10
@@ -59,6 +107,26 @@ until (i > 2)?
   numbers[i] = numbers[i] * 2
   i += 1
 done
+```
+
+**Heterogeneous Array Examples:**
+```
+# Mixed types in single array
+let mixed: array = [1, "hello", true]
+print(mixed[1])  # Outputs: 1
+print(mixed[2])  # Outputs: hello
+print(mixed[3])  # Outputs: true
+
+# Nested arrays
+let nested = [1, 2, [3, 4, 5]]
+print(nested[3][1])  # Outputs: 3
+print(nested[3][2])  # Outputs: 4
+
+# Mixed and nested
+let complex = ["first", [10, 20], true, ["a", "b"]]
+print(complex[1])      # Outputs: first
+print(complex[2][1])   # Outputs: 10
+print(complex[4][2])   # Outputs: b
 ```
 
 Array elements support all compound assignment operators: `+=`, `-=`, `*=`, `/=`
@@ -177,6 +245,19 @@ print(multiply(x, 2))
 | `-` | Subtraction | `a - b` |
 | `*` | Multiplication | `a * b` |
 | `/` | Division | `a / b` |
+
+### String Operators
+
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| `..` | Concatenation | `"Hello" .. " " .. "World"` |
+| `#` | Length | `#"hello"` returns `5` |
+
+### Array Operators
+
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| `#` | Length | `#arr` returns number of elements |
 
 ### Compound Assignment Operators
 
@@ -367,7 +448,74 @@ done
 - The `?` marks the condition
 - Multiple statements can follow
 - Block must end with `done`
-- Statements can include: function calls, assignments, variable declarations, return statements, break, and continue
+- Statements can include: function calls, assignments, variable declarations, return statements, break, continue, and nested conditionals
+
+### Nested Conditionals
+
+Conditional blocks can be nested inside other conditionals, loops, and other conditional blocks at any depth.
+
+**Example:**
+```
+(x < 20)?
+  print("outer condition")
+  (y > 15)?
+    print("inner condition")
+  done
+done
+```
+
+### Break and Continue in Conditionals
+
+`break` and `continue` statements work inside conditionals within loops. `break` exits the loop immediately, while `continue` skips to the next iteration.
+
+**Example:**
+```
+let i: number = 1;
+until (i > 10)?
+  (i == 5)?
+    print("Breaking at 5")
+    break
+  done
+  print(i)
+  i += 1
+done
+
+let j: number = 1;
+until (j > 5)?
+  (j == 3)?
+    print("Skipping 3")
+    continue
+  done
+  print(j)
+  j += 1
+done
+```
+
+### Otherwise (Else) and Elseif
+
+Conditional blocks can have `otherwise` clauses for alternative branches:
+
+**Standalone else:**
+```
+(x > 10)?
+  print("x is greater than 10")
+otherwise?
+  print("x is not greater than 10")
+done
+```
+
+**Else if (with condition):**
+```
+(x > 20)?
+  print("x > 20")
+otherwise (x == 20)?
+  print("x == 20")
+otherwise?
+  print("x < 20")
+done
+```
+
+The `otherwise` keyword can be followed by `?` for a simple else, or by a condition `(expr)?` for else if.
 
 ### Examples
 
@@ -396,18 +544,32 @@ done
 
 ### print()
 
-Output a value to stdout.
+Output a value to stdout without adding a newline (unlike standard print functions).
 
 ```
 print(<expression>)
 ```
 
+To print on separate lines, include `\n` in the string or call print with a newline string.
+
 **Examples:**
 ```
 print(42)
+print("\n")              # Output a newline
 print("Hello, World!")
+print("\n")
 print(x + y)
-print(name)
+print("\n")
+print("Multi")
+print("line")           # Prints "Multiline" without a newline between
+```
+
+**Output:**
+```
+42
+Hello, World!
+<value of x+y>
+Multiline
 ```
 
 ### input()
@@ -514,4 +676,4 @@ Error messages indicate the line number where parsing failed.
 - No structs or custom types
 - No module system
 - No exception handling
-- No break/continue statements
+- Identifier names cannot contain underscores (lexer limitation)

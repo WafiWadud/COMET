@@ -14,23 +14,34 @@ let numbers: number[5] = [1, 2, 3, 4, 5]
 let items: array[] = [10, 20, 30]
 
 print("=== Arithmetic Operations ===")
+print("\n")
 print(x + y)
+print("\n")
 print(x - y)
+print("\n")
 print(x * y)
+print("\n")
 print(x / y)
+print("\n")
 
 print("=== Compound Assignments ===")
+print("\n")
 let counter: number = 10;
 counter += 5
 print(counter)
+print("\n")
 counter -= 3
 print(counter)
+print("\n")
 counter *= 2
 print(counter)
+print("\n")
 counter /= 4
 print(counter)
+print("\n")
 
 print("=== Comparison Operators ===")
+print("\n")
 (x == 42)?
 print("x equals 42")
 done
@@ -56,6 +67,7 @@ print("y is less than or equal to 4")
 done
 
 print("=== Logical Operators ===")
+print("\n")
 (x > 30 && y < 5)?
 print("AND: both conditions true")
 done
@@ -69,6 +81,7 @@ print("Should not print")
 done
 
 print("=== Conditional Blocks ===")
+print("\n")
 (x + y > 40)?
 print("sum is greater than 40")
 done
@@ -78,47 +91,61 @@ print("z equals 100")
 done
 
 print("=== Simple Loop ===")
+print("\n")
 let i: number = 1;
 until (i <= 5)?
   print(i)
+  print("\n")
   i += 1
 done
 
 print("=== Nested Loops ===")
+print("\n")
 let a: number = 1;
 until (a <= 2)?
   print(a)
+  print("\n")
   let b: number = 1;
   until (b <= 3)?
     print(b)
+    print("\n")
     b += 1
   done
   a += 1
 done
 
 print("=== Loop with Compound Operators ===")
+print("\n")
 let counter2: number = 10;
 until (counter2 >= 5)?
   print(counter2)
+  print("\n")
   counter2 -= 2
 done
 
 print("=== Variable Scope in Nested Loops ===")
+print("\n")
 let outer: number = 1;
 until (outer <= 2)?
   let inner: number = 100;
   until (inner <= 102)?
     print(inner)
+    print("\n")
     inner += 1
   done
   outer += 1
 done
 
 print("=== Complex Expressions ===")
+print("\n")
 print((10 + 5) * 2)
+print("\n")
 print(100 / (5 - 2))
+print("\n")
 print(2 + 3 * 4)
+print("\n")
 print((2 + 3) * 4)
+print("\n")
 
 print("=== Boolean Expressions ===")
 (true && true)?
@@ -135,31 +162,44 @@ print("all three conditions true")
 done
 
 print("=== String Variables ===")
+print("\n")
 print(name)
+print("\n")
 
 print("=== Array Access ===")
+print("\n")
 let arr: number[5] = [10, 20, 30, 40, 50]
 print(arr[1])
+print("\n")
 print(arr[2])
+print("\n")
 print(arr[1] + arr[2])
+print("\n")
 
 print("=== Array Element Assignment ===")
+print("\n")
 arr[1] = 100
 print(arr[1])
+print("\n")
 arr[2] += 25
 print(arr[2])
+print("\n")
 arr[3] *= 2
 print(arr[3])
+print("\n")
 
 print("=== Array Modification in Loop ===")
+print("\n")
 let i: number = 1;
 until (i <= 3)?
   arr[i] = arr[i] + 1
   print(arr[i])
+  print("\n")
   i += 1
 done
 
 print("=== Functions with Parameters ===")
+print("\n")
 function add(a: number, b: number) -> number
   return a + b
 done
@@ -173,8 +213,61 @@ function greet(name: string) -> string
 done
 
 print(add(5, 10))
+print("\n")
 print(add(100, 200))
+print("\n")
 print(multiply(4, 5))
+print("\n")
 print(greet("World"))
+print("\n")
+
+print("=== String Concatenation ===")
+print("\n")
+let greeting = "Hello" .. " " .. "World"
+print(greeting)
+print("\n")
+
+print("=== String Length ===")
+print("\n")
+let text = "COMET"
+print(#text)
+print("\n")
+
+print("=== Array Length ===")
+print("\n")
+let testArr = [1, 2, 3]
+print(#testArr)
+print("\n")
+
+print("=== String Interpolation ===")
+print("\n")
+let author = "Developer"
+let version = 1
+let fullMsg = "Created by: ${author}, Version: ${version}"
+print(fullMsg)
+print("\n")
+
+print("=== Otherwise (else) ===")
+print("\n")
+let checkX: number = 7
+(checkX > 10)?
+  print("X is greater")
+otherwise?
+  print("X is not greater")
+done
+print("\n")
+
+print("=== Otherwise with Condition ===")
+print("\n")
+let checkY: number = 15
+(checkY > 20)?
+  print("Y > 20")
+otherwise (checkY == 15)?
+  print("Y == 15")
+otherwise?
+  print("Y < 15")
+done
+print("\n")
 
 print("=== Test Complete ===")
+print("\n")

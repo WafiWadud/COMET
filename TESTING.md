@@ -36,17 +36,30 @@ The comprehensive test file covers:
 - **Conditional Blocks**
   - Simple conditions
   - Complex conditions with multiple operators
+  - Nested conditionals (multiple levels of nesting)
+  - Break statements inside conditionals
+  - Continue statements inside conditionals
 
 - **Loops**
   - Simple while-style loops
   - Nested loops (multiple levels)
   - Variable scope in nested contexts
   - Loops with compound assignments
+  - Conditionals inside loops with break/continue
+
+- **Arrays**
+  - Homogeneous typed arrays (number[], string[], bool[])
+  - Generic heterogeneous arrays with mixed types
+  - Nested arrays at arbitrary depths
+  - Array element access and modification
+  - Array iteration in loops
+  - Chained array indexing
 
 - **Expressions**
   - Binary operators
   - Parenthesized expressions
   - Operator precedence
+  - Chained array access (nested[1][2][3])
 
 All tests are expected to pass and the generated Lua code should execute without errors.
 
