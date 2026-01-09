@@ -13,6 +13,7 @@ parser
 # Compiled bytecode and Lua output
 *.bc
 *.bc.lua
+*.lua
 *.out
 
 # Object files
