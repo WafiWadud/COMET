@@ -9,6 +9,7 @@ parser.tab.o
 
 # Compiled parser binary
 parser
+parser-debug
 
 # Compiled bytecode and Lua output
 *.bc
