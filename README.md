@@ -15,10 +15,15 @@ A lexer and parser that compiles the COMET programming language to LuaJIT byteco
 
 COMET supports:
 - **Variable declarations** with type annotations (bool, number, string, array)
+- **Union types** (e.g., `number | string`) for flexible typing
 - **Arrays**: homogeneous typed arrays and heterogeneous mixed-type arrays with nesting support
+- **Arrays as parameters**: functions can accept arrays as typed parameters with `#` operator support
+- **Array manipulation**: `push()`, `pop()`, `insert()` functions for dynamic array operations
 - **Strings**: escape sequences, interpolation with `${}`, and concatenation with `..`
 - **String/Array operations**: length operator `#` for both strings and arrays
-- **Functions** with parameters, return types, and return statements
+- **Functions**: parameters, return types, return statements, and variadic arguments (`...`)
+- **Type checking methods**: `.isnumber`, `.isstring`, `.isbool` for runtime type checking
+- **Function types**: type annotations for callable signatures
 - **Operators**: arithmetic (+, -, *, /), string concatenation (..),  comparison (==, !=, <, >, <=, >=), logical (&&, ||)
 - **Compound assignments** (+=, -=, *=, /=)
 - **Control flow**: conditional blocks with otherwise/else/elseif, while-style loops, nested structures, break/continue in loops and conditionals
@@ -113,6 +118,27 @@ function add(a: number, b: number) -> number
   return a + b
 done
 
+# Function with array parameter - can use # operator
+function sumarray(nums: number[]) -> number
+  return #nums
+done
+
+# Function with variadic arguments
+function concat(...items) -> string
+  return "combined"
+done
+
+# Union types for flexible parameters
+function process(value: number | string) -> string
+  return "processed"
+done
+
+# Array manipulation
+let arr: number[] = [1, 2, 3]
+push(arr, 4)           # Add to end: [1, 2, 3, 4]
+pop(arr)               # Remove from end: [1, 2, 3]
+insert(arr, 2, 99)     # Insert at position 2: [1, 99, 2, 3]
+
 # Loops with nested conditionals and break
 let i: number = 1;
 until (i > 5)?
@@ -139,8 +165,22 @@ until (j > 3)?
   j += 1
 done
 
+# Type checking with methods
+let data = 42
+(data.isnumber)?
+  print("data is a number")
+done
+print("\n")
+
 # Function calls
 print(add(x, y))
+print("\n")
+
+let arr: number[] = [1, 2, 3]
+print(sumarray(arr))
+print("\n")
+
+print(concat("Hello", "World"))
 print("\n")
 ```
 

@@ -12,6 +12,18 @@ This is a statically-typed programming language that compiles to Lua and can be 
 - **`number`** - Numeric values (integers and floats): `42`, `3.14`
 - **`string`** - Text values: `"hello world"`
 
+### Union Types
+
+Types can be combined using the pipe operator `|` to create union types that accept multiple types:
+
+```
+let flexible: number | string = 42
+let flexible2: string | number = "hello"
+let status: bool | number = true
+```
+
+Union types are useful for variables that can hold different types of values at runtime.
+
 ### String Escape Sequences
 
 Strings support the following escape sequences:
@@ -49,6 +61,29 @@ Use the `..` operator to concatenate strings:
 let greeting = "Hello" .. " " .. "World"
 print(greeting)  // Outputs: Hello World
 ```
+
+### Function Types
+
+Function types can be declared to represent callable objects with specific parameter and return types:
+
+```
+function(<param_types>) -> <return_type>
+```
+
+**Examples:**
+
+```
+# Function type for a function that takes two numbers and returns a number
+let callback: function(number, number) -> number
+
+# Function type for a function that takes a string and returns a string
+let transformer: function(string) -> string
+
+# Function type for a function with no parameters
+let producer: function() -> number
+```
+
+Function types are useful for type annotations when working with higher-order functions (functions that accept other functions as arguments).
 
 ### Array Types
 
@@ -171,7 +206,101 @@ done
 ```
 <identifier>: <type>
 <identifier>: <array_type>
+...<identifier>        # Variadic arguments (accepts any number of arguments)
 ```
+
+### Parameters with Arrays
+
+Functions can accept arrays as parameters:
+
+```
+function sumarray(nums: number[]) -> number
+  return 0
+done
+
+function processitems(items: array[]) -> number
+  return 0
+done
+
+# Call with arrays
+let data: number[] = [1, 2, 3]
+sumarray(data)
+
+let mixed: array[] = [1, "hello", true]
+processitems(mixed)
+```
+
+Arrays are passed by reference and can be typed as:
+- Homogeneous arrays: `number[]`, `string[]`, `bool[]`
+- Generic arrays: `array[]` or `array`
+- Sized arrays: `number[5]` (type annotation, size not enforced)
+
+### Using `#` operator with array parameters
+
+The length operator `#` works on array parameters in functions:
+
+```
+function getarraylen(arr: number[]) -> number
+  return #arr
+done
+
+let data: number[] = [1, 2, 3]
+print(getarraylen(data))  # Outputs: 3
+```
+
+## Array Manipulation Functions
+
+COMET provides built-in functions for array manipulation:
+
+### push(array, value)
+
+Add an element to the end of an array:
+
+```
+let arr: number[] = [1, 2, 3]
+push(arr, 4)     # arr is now [1, 2, 3, 4]
+push(arr, 5)     # arr is now [1, 2, 3, 4, 5]
+```
+
+### pop(array)
+
+Remove and return the last element of an array:
+
+```
+let arr: number[] = [1, 2, 3]
+pop(arr)         # arr is now [1, 2]
+```
+
+### insert(array, position, value)
+
+Insert an element at a specific position (1-based indexing):
+
+```
+let arr: number[] = [1, 2, 3]
+insert(arr, 2, 99)  # arr is now [1, 99, 2, 3]
+```
+
+All array manipulation functions operate on arrays in-place and compile to Lua's `table.insert()` and `table.remove()` functions.
+
+### Variadic Arguments
+
+Functions can accept a variable number of arguments using the `...` ellipsis operator:
+
+```
+function sum(...args) -> number
+  return 0
+done
+
+function greet(...names) -> string
+  return "Hello"
+done
+
+# Call with any number of arguments
+print(sum(1, 2, 3, 4, 5))
+print(greet("Alice", "Bob", "Charlie"))
+```
+
+Variadic parameters must be the last parameter (or only parameter) in the function signature and are represented as `...` in the generated Lua code.
 
 ### Return Statements
 
@@ -539,6 +668,53 @@ done
   x = x + 10
 done
 ```
+
+## Type Checking
+
+### Type Checking Methods
+
+Objects support type checking methods using dot notation:
+
+```
+<expression>.isnumber    # Check if value is a number
+<expression>.isstring    # Check if value is a string
+<expression>.isbool      # Check if value is a boolean
+```
+
+These methods return boolean values (true/false) based on the runtime type of the value.
+
+**Examples:**
+
+```
+let num: number = 42
+let str: string = "hello"
+let flag: bool = true
+
+(num.isnumber)?
+  print("num is a number")
+done
+
+(str.isstring)?
+  print("str is a string")
+done
+
+(flag.isbool)?
+  print("flag is a boolean")
+done
+
+# Works with expressions and variables
+let value = 100
+(value.isnumber)?
+  print("value is numeric")
+done
+
+# Can be combined with logical operators
+(value.isnumber && str.isstring)?
+  print("Both conditions are true")
+done
+```
+
+Type checking methods are particularly useful when working with union types or dynamic values.
 
 ## Built-in Functions
 

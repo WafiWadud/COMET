@@ -100,30 +100,34 @@ IDENTIFIER  {IDENT_START}{IDENT_CONT}*
 
 %%
 
-     /* Comments - # only as comment at start of line or after space */
+     /* Comments - # only as comment at line start or after space if followed by non-operator */
 ^[ \t]*"#"[^\n]*    { /* ignore line comments */ }
-[ \t]+"#"[^\n]*     { /* ignore inline comments after whitespace */ }
 "//".*              { /* ignore inline comments */ }
 
      /* Keywords */
-"let"               { return LET; }
-"done"              { return DONE; }
-"function"          { return FUNCTION; }
-"return"            { return RETURN; }
-"break"             { return BREAK; }
-"continue"          { return CONTINUE; }
-"print"             { return PRINT; }
-"input"             { return INPUT; }
-"until"             { return UNTIL; }
-"otherwise"         { return OTHERWISE; }
-"true"              { return TRUE; }
-"false"             { return FALSE; }
-"bool"              { return BOOL; }
-"number"            { return NUMBER; }
-"string"            { return STRING; }
-"array"             { return ARRAY; }
+     "let"               { return LET; }
+     "done"              { return DONE; }
+     "function"          { return FUNCTION; }
+     "return"            { return RETURN; }
+     "break"             { return BREAK; }
+     "continue"          { return CONTINUE; }
+     "print"             { return PRINT; }
+     "input"             { return INPUT; }
+     "until"             { return UNTIL; }
+     "otherwise"         { return OTHERWISE; }
+     "true"              { return TRUE; }
+     "false"             { return FALSE; }
+     "bool"              { return BOOL; }
+     "number"            { return NUMBER; }
+     "string"            { return STRING; }
+     "array"             { return ARRAY; }
+     "isnumber"          { return ISNUMBER; }
+     "isstring"          { return ISSTRING; }
+     "isbool"            { return ISBOOL; }
 
     /* Operators */
+"..."               { return ELLIPSIS; }
+".."                { return CONCAT; }
 "=="                { return EQ; }
 "!="                { return NEQ; }
 "!"                 { return NOT; }
@@ -134,7 +138,7 @@ IDENTIFIER  {IDENT_START}{IDENT_CONT}*
 ">="                { return GE; }
 "||"                { return OR; }
 "&&"                { return AND; }
-".."                { return CONCAT; }
+"|"                 { return PIPE; }
 "+="                { return PLUS_ASSIGN; }
 "-="                { return MINUS_ASSIGN; }
 "*="                { return MULT_ASSIGN; }
@@ -153,6 +157,7 @@ IDENTIFIER  {IDENT_START}{IDENT_CONT}*
 ":"                 { return COLON; }
 ";"                 { return SEMICOLON; }
 ","                 { return COMMA; }
+"."                 { return DOT; }
 "->"                { return ARROW; }
 "?"                 { return QUESTION; }
 

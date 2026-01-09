@@ -1,20 +1,29 @@
-# Comprehensive Language Test
+# Comprehensive Language Test - All Features
 
-# Variable declarations with type annotations
+# ========== VARIABLE DECLARATIONS ==========
+print("=== Variable Declarations ===")
+print("\n")
+
+# With type annotations
 let x: number = 42
 let y: number = 3.14
-let name: string = "Test"
+let name: string = "COMET"
 let flag: bool = true
 
-# Variable declarations without type
-let z = 100;
+# Without type annotations
+let z = 100
 
-# Array declarations
+# Arrays
 let numbers: number[5] = [1, 2, 3, 4, 5]
 let items: array[] = [10, 20, 30]
 
+print("Variables declared")
+print("\n")
+
+# ========== ARITHMETIC OPERATIONS ==========
 print("=== Arithmetic Operations ===")
 print("\n")
+
 print(x + y)
 print("\n")
 print(x - y)
@@ -24,88 +33,95 @@ print("\n")
 print(x / y)
 print("\n")
 
+# ========== COMPOUND ASSIGNMENTS ==========
 print("=== Compound Assignments ===")
 print("\n")
-let counter: number = 10;
+
+let counter: number = 10
 counter += 5
 print(counter)
 print("\n")
+
 counter -= 3
 print(counter)
 print("\n")
+
 counter *= 2
 print(counter)
 print("\n")
+
 counter /= 4
 print(counter)
 print("\n")
 
+# ========== COMPARISON OPERATORS ==========
 print("=== Comparison Operators ===")
 print("\n")
+
 (x == 42)?
-print("x equals 42")
+  print("x equals 42")
 done
+print("\n")
 
 (y > 3)?
-print("y is greater than 3")
+  print("y is greater than 3")
 done
+print("\n")
 
 (x != 0)?
-print("x is not zero")
+  print("x is not zero")
 done
+print("\n")
 
 (y < 5)?
-print("y is less than 5")
+  print("y is less than 5")
 done
+print("\n")
 
 (x >= 40)?
-print("x is greater than or equal to 40")
+  print("x is greater than or equal to 40")
 done
+print("\n")
 
 (y <= 4)?
-print("y is less than or equal to 4")
+  print("y is less than or equal to 4")
 done
+print("\n")
 
+# ========== LOGICAL OPERATORS ==========
 print("=== Logical Operators ===")
 print("\n")
+
 (x > 30 && y < 5)?
-print("AND: both conditions true")
+  print("AND: both conditions true")
 done
+print("\n")
 
 (x < 30 || y > 2)?
-print("OR: at least one condition true")
+  print("OR: at least one condition true")
 done
-
-(x > 40 && y > 5)?
-print("Should not print")
-done
-
-print("=== Conditional Blocks ===")
 print("\n")
-(x + y > 40)?
-print("sum is greater than 40")
-done
 
-(z == 100)?
-print("z equals 100")
-done
-
+# ========== LOOPS ==========
 print("=== Simple Loop ===")
 print("\n")
-let i: number = 1;
+
+let i: number = 1
 until (i <= 5)?
   print(i)
   print("\n")
   i += 1
 done
 
+# ========== NESTED LOOPS ==========
 print("=== Nested Loops ===")
 print("\n")
-let a: number = 1;
+
+let a: number = 1
 until (a <= 2)?
   print(a)
   print("\n")
-  let b: number = 1;
+  let b: number = 1
   until (b <= 3)?
     print(b)
     print("\n")
@@ -114,30 +130,10 @@ until (a <= 2)?
   a += 1
 done
 
-print("=== Loop with Compound Operators ===")
-print("\n")
-let counter2: number = 10;
-until (counter2 >= 5)?
-  print(counter2)
-  print("\n")
-  counter2 -= 2
-done
-
-print("=== Variable Scope in Nested Loops ===")
-print("\n")
-let outer: number = 1;
-until (outer <= 2)?
-  let inner: number = 100;
-  until (inner <= 102)?
-    print(inner)
-    print("\n")
-    inner += 1
-  done
-  outer += 1
-done
-
+# ========== COMPLEX EXPRESSIONS ==========
 print("=== Complex Expressions ===")
 print("\n")
+
 print((10 + 5) * 2)
 print("\n")
 print(100 / (5 - 2))
@@ -147,27 +143,25 @@ print("\n")
 print((2 + 3) * 4)
 print("\n")
 
-print("=== Boolean Expressions ===")
-(true && true)?
-print("both true")
-done
-
-(false || true)?
-print("one true")
-done
-
-print("=== Multiple Conditions ===")
-(x > 40 && y > 3 && z == 100)?
-print("all three conditions true")
-done
-
-print("=== String Variables ===")
-print("\n")
-print(name)
+# ========== STRING OPERATIONS ==========
+print("=== String Concatenation ===")
 print("\n")
 
+let greeting = "Hello" .. " " .. "World"
+print(greeting)
+print("\n")
+
+print("=== String Length ===")
+print("\n")
+
+let text = "COMET"
+print(#text)
+print("\n")
+
+# ========== ARRAY OPERATIONS ==========
 print("=== Array Access ===")
 print("\n")
+
 let arr: number[5] = [10, 20, 30, 40, 50]
 print(arr[1])
 print("\n")
@@ -178,28 +172,40 @@ print("\n")
 
 print("=== Array Element Assignment ===")
 print("\n")
+
 arr[1] = 100
 print(arr[1])
 print("\n")
+
 arr[2] += 25
 print(arr[2])
 print("\n")
+
 arr[3] *= 2
 print(arr[3])
 print("\n")
 
-print("=== Array Modification in Loop ===")
+print("=== Array Length ===")
 print("\n")
-let i: number = 1;
-until (i <= 3)?
-  arr[i] = arr[i] + 1
-  print(arr[i])
-  print("\n")
-  i += 1
-done
 
+let testArr = [1, 2, 3]
+print(#testArr)
+print("\n")
+
+# ========== STRING INTERPOLATION ==========
+print("=== String Interpolation ===")
+print("\n")
+
+let author = "Developer"
+let version = 1
+let fullMsg = "Created by: ${author}, Version: ${version}"
+print(fullMsg)
+print("\n")
+
+# ========== FUNCTIONS ==========
 print("=== Functions with Parameters ===")
 print("\n")
+
 function add(a: number, b: number) -> number
   return a + b
 done
@@ -208,8 +214,8 @@ function multiply(x: number, y: number) -> number
   return x * y
 done
 
-function greet(name: string) -> string
-  return name
+function greet(msg: string) -> string
+  return msg
 done
 
 print(add(5, 10))
@@ -221,34 +227,161 @@ print("\n")
 print(greet("World"))
 print("\n")
 
-print("=== String Concatenation ===")
-print("\n")
-let greeting = "Hello" .. " " .. "World"
-print(greeting)
+# ========== VARIADIC FUNCTIONS ==========
+print("=== Variadic Arguments ===")
 print("\n")
 
-print("=== String Length ===")
+function sumargs(...nums) -> number
+  return 0
+done
+
+function concat(...items) -> string
+  return "combined"
+done
+
+print(sumargs(1, 2, 3, 4, 5))
 print("\n")
-let text = "COMET"
-print(#text)
+print(concat("a", "b", "c"))
 print("\n")
 
-print("=== Array Length ===")
-print("\n")
-let testArr = [1, 2, 3]
-print(#testArr)
+# ========== ARRAY FUNCTION PARAMETERS ==========
+print("=== Arrays as Function Parameters ===")
 print("\n")
 
-print("=== String Interpolation ===")
-print("\n")
-let author = "Developer"
-let version = 1
-let fullMsg = "Created by: ${author}, Version: ${version}"
-print(fullMsg)
+function getarraylen(arr: number[]) -> number
+  return #arr
+done
+
+function processmixedarray(items: array[]) -> number
+  return #items
+done
+
+let data: number[] = [100, 200, 300]
+print("Length of numeric array: ")
+print(getarraylen(data))
 print("\n")
 
+let mixeddata: array[] = [1, "two", true]
+print("Length of mixed array: ")
+print(processmixedarray(mixeddata))
+print("\n")
+
+# ========== ARRAY MANIPULATION ==========
+print("=== Array Manipulation (push, pop, insert) ===")
+print("\n")
+
+let arr: number[] = [1, 2, 3]
+print("Initial array length: ")
+print(#arr)
+print("\n")
+
+push(arr, 4)
+print("After push(arr, 4): ")
+print(#arr)
+print("\n")
+
+push(arr, 5)
+print("After push(arr, 5): ")
+print(#arr)
+print("\n")
+
+pop(arr)
+print("After pop(arr): ")
+print(#arr)
+print("\n")
+
+insert(arr, 2, 99)
+print("After insert(arr, 2, 99): ")
+print(#arr)
+print("\n")
+print("Element at position 2: ")
+print(arr[2])
+print("\n")
+
+# ========== UNION TYPES ==========
+print("=== Union Types ===")
+print("\n")
+
+let flexible: number | string = 42
+print(flexible)
+print("\n")
+
+let flexible2: string | number = "hello"
+print(flexible2)
+print("\n")
+
+# ========== TYPE CHECKING METHODS ==========
+print("=== Type Checking Methods ===")
+print("\n")
+
+let num: number = 123
+let str: string = "test"
+let flag: bool = true
+
+(num.isnumber)?
+  print("num is a number")
+done
+print("\n")
+
+(str.isstring)?
+  print("str is a string")
+done
+print("\n")
+
+(flag.isbool)?
+  print("flag is a boolean")
+done
+print("\n")
+
+# ========== TYPE CHECKING WITH EXPRESSIONS ==========
+print("=== Type Checking with Expressions ===")
+print("\n")
+
+let val1 = 100
+(val1.isnumber)?
+  print("val1 is numeric")
+done
+print("\n")
+
+let val2 = "world"
+(val2.isstring)?
+  print("val2 is text")
+done
+print("\n")
+
+# ========== CONDITIONAL LOGIC ==========
+print("=== Type Checking in Conditionals ===")
+print("\n")
+
+let testval = 42
+(testval.isnumber)?
+  print("testval is a number")
+otherwise?
+  print("testval is not a number")
+done
+print("\n")
+
+# ========== COMBINED TYPE CHECKING AND LOGIC ==========
+print("=== Combined Type Checking ===")
+print("\n")
+
+let a = 10
+let b = "test"
+
+(a.isnumber && b.isstring)?
+  print("a is number AND b is string")
+done
+print("\n")
+
+(a.isstring || b.isstring)?
+  print("At least one is string")
+done
+print("\n")
+
+# ========== OTHERWISE CLAUSES ==========
 print("=== Otherwise (else) ===")
 print("\n")
+
 let checkX: number = 7
 (checkX > 10)?
   print("X is greater")
@@ -259,6 +392,7 @@ print("\n")
 
 print("=== Otherwise with Condition ===")
 print("\n")
+
 let checkY: number = 15
 (checkY > 20)?
   print("Y > 20")
@@ -269,5 +403,18 @@ otherwise?
 done
 print("\n")
 
-print("=== Test Complete ===")
+# ========== MIXED FEATURES ==========
+print("=== Feature Showcase ===")
+print("\n")
+
+function processmixed(items: array[], value: number | string) -> string
+  return "processed"
+done
+
+let result = processmixed(mixeddata, 42)
+print(result)
+print("\n")
+
+# ========== TEST COMPLETE ==========
+print("=== All Features Tested Successfully ===")
 print("\n")

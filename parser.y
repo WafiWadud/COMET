@@ -34,17 +34,18 @@ void emit_lua(const char *fmt, ...) {
 %token LET DONE FUNCTION RETURN BREAK CONTINUE PRINT INPUT UNTIL OTHERWISE
 %token TRUE FALSE
 %token BOOL NUMBER STRING ARRAY
-%token EQ NEQ LT GT LE GE OR AND NOT LENGTH CONCAT
+%token ISNUMBER ISSTRING ISBOOL
+%token EQ NEQ LT GT LE GE OR AND NOT LENGTH CONCAT ELLIPSIS PIPE
 %token PLUS MINUS MULT DIV ASSIGN
 %token PLUS_ASSIGN MINUS_ASSIGN MULT_ASSIGN DIV_ASSIGN
 %token LPAREN RPAREN LBRACKET RBRACKET
-%token COLON SEMICOLON COMMA ARROW QUESTION
+%token COLON SEMICOLON COMMA DOT ARROW QUESTION
 %token <num> INT_LITERAL
 %token <fnum> FLOAT_LITERAL
 %token <str> STRING_LITERAL IDENTIFIER
 
 /* Non-terminal types */
-%type <str> type array_type value expression argument_list array_elements array_element array_value conditional_block conditional_body conditional_statement loop_block loop_statement_list loop_statement assignment parameter_list parameter return_statement
+%type <str> type type_list array_type value expression argument_list array_elements array_element array_value conditional_block conditional_body conditional_statement loop_block loop_statement_list loop_statement assignment parameter_list parameter return_statement
 
 /* Operator precedence */
 %left OR
@@ -185,6 +186,8 @@ type:
     BOOL        { $$ = strdup("bool"); }
     | NUMBER    { $$ = strdup("number"); }
     | STRING    { $$ = strdup("string"); }
+    | type PIPE type 
+    { $$ = malloc(strlen($1) + strlen($3) + 4); sprintf($$, "%s|%s", $1, $3); }
     ;
 
 array_type:
@@ -193,6 +196,15 @@ array_type:
     | ARRAY LBRACKET RBRACKET                   { $$ = strdup("array"); }
     | ARRAY LBRACKET INT_LITERAL RBRACKET       { $$ = strdup("array"); }
     | ARRAY                                      { $$ = strdup("array"); }
+    | FUNCTION LPAREN type_list RPAREN ARROW type
+    { $$ = malloc(512); sprintf($$, "function(%s)->%s", $3, $6); }
+    | FUNCTION LPAREN RPAREN ARROW type
+    { $$ = malloc(256); sprintf($$, "function()->%s", $5); }
+    ;
+
+type_list:
+    type { $$ = $1; }
+    | type_list COMMA type { $$ = malloc(256); sprintf($$, "%s, %s", $1, $3); }
     ;
 
 value:
@@ -238,6 +250,7 @@ parameter_list:
 parameter:
     IDENTIFIER COLON type { $$ = $1; }
     | IDENTIFIER COLON array_type { $$ = $1; }
+    | ELLIPSIS IDENTIFIER { $$ = strdup("..."); }
     ;
 
 function_body:
@@ -249,7 +262,18 @@ function_call:
     PRINT LPAREN expression RPAREN
     { emit_lua("io.write(%s)\n", $3); }
     | IDENTIFIER LPAREN argument_list RPAREN
-    { emit_lua("%s(%s)\n", $1, $3); }
+    { 
+      // Handle array functions - map to Lua table functions
+      if (strcmp($1, "push") == 0) {
+        emit_lua("table.insert(%s)\n", $3);
+      } else if (strcmp($1, "pop") == 0) {
+        emit_lua("table.remove(%s)\n", $3);
+      } else if (strcmp($1, "insert") == 0) {
+        emit_lua("table.insert(%s)\n", $3);
+      } else {
+        emit_lua("%s(%s)\n", $1, $3);
+      }
+    }
     | IDENTIFIER LPAREN RPAREN
     { emit_lua("%s()\n", $1); }
     ;
@@ -262,6 +286,7 @@ argument_list:
 expression:
     value { $$ = $1; }
     | NOT expression { $$ = malloc(100); sprintf($$, "(not %s)", $2); }
+    | LENGTH value { $$ = malloc(100); sprintf($$, "(#%s)", $2); }
     | LENGTH expression { $$ = malloc(100); sprintf($$, "(#%s)", $2); }
     | expression PLUS expression { $$ = malloc(100); sprintf($$, "(%s + %s)", $1, $3); }
     | expression CONCAT expression { $$ = malloc(100); sprintf($$, "(%s .. %s)", $1, $3); }
@@ -279,10 +304,26 @@ expression:
     | LPAREN expression RPAREN { $$ = $2; }
     | IDENTIFIER LBRACKET expression RBRACKET { $$ = malloc(256); sprintf($$, "%s[%s]", $1, $3); }
     | expression LBRACKET expression RBRACKET { $$ = malloc(256); sprintf($$, "%s[%s]", $1, $3); }
+    | expression DOT ISNUMBER { $$ = malloc(256); sprintf($$, "(type(%s) == \"number\")", $1); }
+    | expression DOT ISSTRING { $$ = malloc(256); sprintf($$, "(type(%s) == \"string\")", $1); }
+    | expression DOT ISBOOL { $$ = malloc(256); sprintf($$, "(type(%s) == \"boolean\")", $1); }
     | IDENTIFIER LPAREN argument_list RPAREN 
     { 
-      // Handle builtin functions
-      if (strcmp($1, "tostring") == 0 || strcmp($1, "tonumber") == 0 ||
+      // Handle array functions - map to Lua table functions
+      if (strcmp($1, "push") == 0) {
+        $$ = malloc(256);
+        sprintf($$, "table.insert(%s)", $3);
+      }
+      else if (strcmp($1, "pop") == 0) {
+        $$ = malloc(256);
+        sprintf($$, "table.remove(%s)", $3);
+      }
+      else if (strcmp($1, "insert") == 0) {
+        $$ = malloc(256);
+        sprintf($$, "table.insert(%s)", $3);
+      }
+      // Handle other builtin functions
+      else if (strcmp($1, "tostring") == 0 || strcmp($1, "tonumber") == 0 ||
           strcmp($1, "abs") == 0 || strcmp($1, "floor") == 0 || strcmp($1, "ceil") == 0 ||
           strcmp($1, "min") == 0 || strcmp($1, "max") == 0 || strcmp($1, "sqrt") == 0 ||
           strcmp($1, "run_cmd") == 0) {
