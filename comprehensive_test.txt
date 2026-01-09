@@ -137,6 +137,28 @@ done
 print("=== String Variables ===")
 print(name)
 
+print("=== Array Access ===")
+let arr: number[5] = [10, 20, 30, 40, 50]
+print(arr[1])
+print(arr[2])
+print(arr[1] + arr[2])
+
+print("=== Array Element Assignment ===")
+arr[1] = 100
+print(arr[1])
+arr[2] += 25
+print(arr[2])
+arr[3] *= 2
+print(arr[3])
+
+print("=== Array Modification in Loop ===")
+let i: number = 1;
+until (i <= 3)?
+  arr[i] = arr[i] + 1
+  print(arr[i])
+  i += 1
+done
+
 print("=== Functions with Parameters ===")
 function add(a: number, b: number) -> number
   return a + b

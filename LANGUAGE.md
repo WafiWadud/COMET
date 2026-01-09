@@ -23,6 +23,46 @@ array[]            # Generic dynamic array
 array[10]          # Generic array with size 10
 ```
 
+### Array Access and Assignment
+
+Array elements are accessed and modified using bracket notation with 1-based indexing (like Lua):
+
+**Access:**
+```
+arr[1]             # First element
+arr[i]             # Element at index i
+arr[i + 1]         # Element at computed index
+```
+
+**Assignment:**
+```
+arr[1] = 10        # Set first element to 10
+arr[i] = value     # Set element at index i
+arr[i] += 5        # Add 5 to element at index i
+```
+
+**Examples:**
+```
+let numbers: number[] = [10, 20, 30]
+print(numbers[1])  # Outputs: 10
+print(numbers[2])  # Outputs: 20
+
+# Modify elements
+numbers[1] = 100
+numbers[2] += 50
+print(numbers[1])  # Outputs: 100
+print(numbers[2])  # Outputs: 70
+
+# Array modification in loops
+let i: number = 1;
+until (i > 2)?
+  numbers[i] = numbers[i] * 2
+  i += 1
+done
+```
+
+Array elements support all compound assignment operators: `+=`, `-=`, `*=`, `/=`
+
 ## Variables
 
 ### Declaration Syntax

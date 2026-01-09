@@ -115,6 +115,16 @@ assignment:
     { emit_lua("%s = %s * %s\n", $1, $1, $3); }
     | IDENTIFIER DIV_ASSIGN expression opt_semi
     { emit_lua("%s = %s / %s\n", $1, $1, $3); }
+    | IDENTIFIER LBRACKET expression RBRACKET ASSIGN expression opt_semi
+    { emit_lua("%s[%s] = %s\n", $1, $3, $6); }
+    | IDENTIFIER LBRACKET expression RBRACKET PLUS_ASSIGN expression opt_semi
+    { emit_lua("%s[%s] = %s[%s] + %s\n", $1, $3, $1, $3, $6); }
+    | IDENTIFIER LBRACKET expression RBRACKET MINUS_ASSIGN expression opt_semi
+    { emit_lua("%s[%s] = %s[%s] - %s\n", $1, $3, $1, $3, $6); }
+    | IDENTIFIER LBRACKET expression RBRACKET MULT_ASSIGN expression opt_semi
+    { emit_lua("%s[%s] = %s[%s] * %s\n", $1, $3, $1, $3, $6); }
+    | IDENTIFIER LBRACKET expression RBRACKET DIV_ASSIGN expression opt_semi
+    { emit_lua("%s[%s] = %s[%s] / %s\n", $1, $3, $1, $3, $6); }
     ;
 
 conditional_block:
@@ -226,6 +236,7 @@ expression:
     | expression OR expression { $$ = malloc(100); sprintf($$, "(%s or %s)", $1, $3); }
     | expression AND expression { $$ = malloc(100); sprintf($$, "(%s and %s)", $1, $3); }
     | LPAREN expression RPAREN { $$ = $2; }
+    | IDENTIFIER LBRACKET expression RBRACKET { $$ = malloc(256); sprintf($$, "%s[%s]", $1, $3); }
     | IDENTIFIER LPAREN argument_list RPAREN { $$ = malloc(256); sprintf($$, "%s(%s)", $1, $3); }
     | IDENTIFIER LPAREN RPAREN { $$ = malloc(100); sprintf($$, "%s()", $1); }
     | INPUT LPAREN STRING_LITERAL COMMA type RPAREN 
