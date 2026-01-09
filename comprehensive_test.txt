@@ -403,6 +403,20 @@ otherwise?
 done
 print("\n")
 
+# ========== SHELL COMMANDS ==========
+print("=== Shell Command Execution ===")
+print("\n")
+
+print("Running: echo 'Hello from shell'")
+runcmd("echo 'Hello from shell'")
+print("\n")
+
+print("Getting exit code:")
+let exitcode = runcmd("true")
+print("Exit code: ")
+print(exitcode)
+print("\n")
+
 # ========== MIXED FEATURES ==========
 print("=== Feature Showcase ===")
 print("\n")

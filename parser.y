@@ -270,6 +270,10 @@ function_call:
         emit_lua("table.remove(%s)\n", $3);
       } else if (strcmp($1, "insert") == 0) {
         emit_lua("table.insert(%s)\n", $3);
+      }
+      // Handle runcmd - map to os.execute
+      else if (strcmp($1, "runcmd") == 0) {
+        emit_lua("os.execute(%s)\n", $3);
       } else {
         emit_lua("%s(%s)\n", $1, $3);
       }
@@ -322,14 +326,18 @@ expression:
         $$ = malloc(256);
         sprintf($$, "table.insert(%s)", $3);
       }
-      // Handle other builtin functions
-      else if (strcmp($1, "tostring") == 0 || strcmp($1, "tonumber") == 0 ||
-          strcmp($1, "abs") == 0 || strcmp($1, "floor") == 0 || strcmp($1, "ceil") == 0 ||
-          strcmp($1, "min") == 0 || strcmp($1, "max") == 0 || strcmp($1, "sqrt") == 0 ||
-          strcmp($1, "run_cmd") == 0) {
-        $$ = malloc(256);
-        sprintf($$, "%s(%s)", $1, $3);
-      } else {
+      // Handle runcmd - map to os.execute
+       else if (strcmp($1, "runcmd") == 0) {
+         $$ = malloc(256);
+         sprintf($$, "os.execute(%s)", $3);
+       }
+       // Handle other builtin functions
+       else if (strcmp($1, "tostring") == 0 || strcmp($1, "tonumber") == 0 ||
+           strcmp($1, "abs") == 0 || strcmp($1, "floor") == 0 || strcmp($1, "ceil") == 0 ||
+           strcmp($1, "min") == 0 || strcmp($1, "max") == 0 || strcmp($1, "sqrt") == 0) {
+         $$ = malloc(256);
+         sprintf($$, "%s(%s)", $1, $3);
+       } else {
         $$ = malloc(256);
         sprintf($$, "%s(%s)", $1, $3);
       }

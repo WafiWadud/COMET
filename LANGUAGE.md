@@ -282,6 +282,43 @@ insert(arr, 2, 99)  # arr is now [1, 99, 2, 3]
 
 All array manipulation functions operate on arrays in-place and compile to Lua's `table.insert()` and `table.remove()` functions.
 
+## Shell Commands
+
+### runcmd(command)
+
+Execute a shell command and return the exit code:
+
+```
+runcmd("echo hello")    # Outputs: hello (to stdout, not captured)
+let code = runcmd("true")   # code = 0 (success)
+```
+
+The `runcmd()` function:
+- Takes a string containing a shell command
+- Executes the command using the system shell
+- Returns the exit code (0 for success, non-zero for failure)
+- Command output goes directly to stdout/stderr
+- Compiles to Lua's `os.execute()` function
+
+**Examples:**
+
+```
+# Run a simple command
+runcmd("echo Running test")
+
+# Capture exit code
+let status = runcmd("test -f myfile.txt")
+(status == 0)?
+  print("File exists")
+otherwise?
+  print("File not found")
+done
+
+# Run multiple commands
+runcmd("mkdir -p output")
+runcmd("cp file.txt output/")
+```
+
 ### Variadic Arguments
 
 Functions can accept a variable number of arguments using the `...` ellipsis operator:

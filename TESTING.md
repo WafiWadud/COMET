@@ -109,11 +109,18 @@ The `comprehensive_test.txt` file tests the following features:
 - **With logical operators**: `(a.isnumber && b.isstring)?`
 - **Works with expressions**: `(compute().isnumber)?`
 
-### 14. Mixed Features
+### 14. Shell Commands
+- **runcmd(command)**: Execute shell commands
+- **Exit codes**: Capture return values from commands
+- **Output handling**: Direct stdout/stderr output
+- **Command execution**: System shell integration
+
+### 15. Mixed Features
 - Arrays with function parameters
 - Union types in function parameters
 - Type checking methods with complex expressions
 - Variadic functions with different argument types
+- Shell command integration
 
 ## Expected Output
 
@@ -130,6 +137,8 @@ When running the comprehensive test, you should see:
 - Function call results
 - Array function parameters working with `#` operator
 - Array manipulation results (push, pop, insert)
+- Shell command output from runcmd()
+- Exit code from shell commands
 - Type checking confirmations
 - "All Features Tested Successfully"
 

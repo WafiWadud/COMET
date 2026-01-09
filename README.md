@@ -24,6 +24,7 @@ COMET supports:
 - **Functions**: parameters, return types, return statements, and variadic arguments (`...`)
 - **Type checking methods**: `.isnumber`, `.isstring`, `.isbool` for runtime type checking
 - **Function types**: type annotations for callable signatures
+- **Shell commands**: `runcmd()` function for executing system commands
 - **Operators**: arithmetic (+, -, *, /), string concatenation (..),  comparison (==, !=, <, >, <=, >=), logical (&&, ||)
 - **Compound assignments** (+=, -=, *=, /=)
 - **Control flow**: conditional blocks with otherwise/else/elseif, while-style loops, nested structures, break/continue in loops and conditionals
@@ -138,6 +139,13 @@ let arr: number[] = [1, 2, 3]
 push(arr, 4)           # Add to end: [1, 2, 3, 4]
 pop(arr)               # Remove from end: [1, 2, 3]
 insert(arr, 2, 99)     # Insert at position 2: [1, 99, 2, 3]
+
+# Shell commands
+runcmd("echo Running")
+let status = runcmd("test -f file.txt")
+(status == 0)?
+  print("File exists")
+done
 
 # Loops with nested conditionals and break
 let i: number = 1;
